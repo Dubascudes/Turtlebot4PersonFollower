@@ -10,7 +10,7 @@ This project implements a person-following robot using ROS 2. We us YOLOv8n for 
 
 ## Setup Instructions
 
-1. Clone this repository:
+1. Clone this repository and cd into it:
 ```bash
 git clone <repository-url>
 cd ~/path/to/repo
