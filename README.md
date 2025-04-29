@@ -1,6 +1,28 @@
-# Person Follower Robot
+# Person Follower Robot, EEL 5934 Autonomous Robotics, University of Florida Spring 2025
 
 This project implements a person-following robot using ROS 2. We us YOLOv8n for person detection and target heading estimation and lidar data to estimate distance. These measurements are smoothed, filtered, and used in a P-controller designed to stay 1 meter behind the target.
+
+We have defined some commands for the robot that determine its current action.
+Undock: The robot starts on a power dock for charging. This command has the robot
+back off of the dock and turn 180 degrees. Dock: There is a dock pose topic than we subscribe to, which allows us to get the position of the dock relative to the robot. We can then move the robot to that position, having it re-dock.
+
+Idle: This kills the robot's current action. 
+Follow: This causes the robot to follow a person.
+
+The "Following" process has two main components: Person detection and P-control. 
+
+Person Detection:
+We use YOLOv8 to detect people. We use the lidar to find the closest object and draw bounding
+boxes around the closest detected object. We then draw a circle at the center of that bounding box.
+The robot tries to center its camera on the bounding box center. We also use an algorithm called
+SORT to keep track of all the different objects that have been detected and only follow the object
+that was initially detected.
+
+P-Control: We directly control the linear and angular velocity through the Twist node. We get the
+heading from the robot to the person by comparing the camera center to the bounding box center and adjust accordingly. 
+We get the distance from the robot to the person using lidar information. When the robot reaches the minimum following
+distance, it stops and waits for the person to move farther away. When the person moves out of camera view, the robot
+spins in the direction that the person moved out of camera view until the person is found again.
 
 ## Prerequisites
 - Ubuntu 24.04 LTS
@@ -64,12 +86,10 @@ ros2 run final_project think
 ros2 run final_project see
 ```
 
-## Model Files
+## YOLO Model Files
 
 The project uses the YOLOv8n model (`yolov8n.pt`) for person detection. [Download it](https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt) and put it in this repository.
-## License
 
-TODO: Add license information
 
 ## Maintainers
 
