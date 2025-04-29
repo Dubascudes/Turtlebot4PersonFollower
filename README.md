@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 4. Install ROS 2 dependencies and source ROS:
 ```bash
-sudo apt-get install ros-jazzy-cv-bridge ros-jazzy-image-transport ros-jazzy-sensor-msgs ros-jazzy-std-msgs
+sudo apt-get install ros-jazzy-cv-bridge ros-jazzy-image-transport ros-jazzy-sensor-msgs ros-jazzy-std-msgs ros-jazzy-tf-transformations
 source /opt/ros/jazzy/install/setup.bash
 ```
 
