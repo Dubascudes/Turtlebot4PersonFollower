@@ -35,7 +35,6 @@ source /opt/ros/jazzy/install/setup.bash
 
 5. Build the ROS 2 workspace:
 ```bash
-cd final_project
 colcon build
 source install/setup.bash
 ```
