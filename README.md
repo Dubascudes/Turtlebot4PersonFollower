@@ -5,24 +5,28 @@ This project implements a person-following robot using ROS 2. We us YOLOv8n for 
 We have defined some commands for the robot that determine its current action.
 Undock: The robot starts on a power dock for charging. This command has the robot
 back off of the dock and turn 180 degrees. Dock: There is a dock pose topic than we subscribe to, which allows us to get the position of the dock relative to the robot. We can then move the robot to that position, having it re-dock.
-
 Idle: This kills the robot's current action. 
 Follow: This causes the robot to follow a person.
 
-The "Following" process has two main components: Person detection and P-control. 
+The "Following" process has two main components: the "see" node and "think" node. 
 
-Person Detection:
-We use YOLOv8 to detect people. We use the lidar to find the closest object and draw bounding
-boxes around the closest detected object. We then draw a circle at the center of that bounding box.
-The robot tries to center its camera on the bounding box center. We also use an algorithm called
-SORT to keep track of all the different objects that have been detected and only follow the object
-that was initially detected.
+See Node:
+The see node drives person detection for the robot. We use YOLOv8 to detect people. We gather all detected person bounding boxes
+and pass them to the Simple, Online, and Real-time Tracking (SORT) algorithm ([link](https://github.com/ultralytics/assets/releases/download/v8.3.0/yolov8n.pt)). 
+SORT tracks all of the detected person objects and assigns unique IDs to each object. Then, a homography is performed on each 
+bounding box, transforming them from the camera point-of-view to the lidar point-of-view. This allows us to get the 
+heading of each of the tracked bounding boxes. We search a +/-10 degree angle for each bounding box heading. Within that 
+cone, we take the average of the closest 10% of points and consider that to be the location of the person indicated by the bounding box.
+If no person has previously been detected, the closest person will be the new person to follow. Otherwise, the robot
+follows the person that it was previously following, indicated by a matching SORT ID. The distance and heading to the designated person
+are then filtered and smoothed using a 1D Kalman Filter. The heading and distance are then fed to the think node. 
 
-P-Control: We directly control the linear and angular velocity and publish them to /cmd_vel in a TwistStamped message. We get the
-heading from the robot to the person by comparing the camera center to the bounding box center and adjust accordingly. 
-We get the distance from the robot to the person using lidar information. When the robot reaches the minimum following
-distance, it stops and waits for the person to move farther away. When the person moves out of camera view, the robot
-spins in the direction that the person moved out of camera view until the person is found again.
+Think Node: 
+We directly control the linear and angular velocity and publish them to /cmd_vel in a TwistStamped message. The robot moves directly toward the person
+until it reaches the minimum following distance, at which point it stops and waits for the person to move farther away. Once the person has moved farther away,
+the robot begins moving towards the person again. While moving, we adjust the heading of the robot so that the person being followed is directly 
+centered on the camera. This is achieved by comparing the camera center to the bounding box center and adjusting the heading accordingly. When the 
+person moves out of camera view, the robot spins in the direction that the person moved out of camera view until the person is found again.
 
 ## Prerequisites
 - Ubuntu 24.04 LTS
