@@ -1,0 +1,3 @@
+[console_scripts]
+nav2_controller = final_project.nav2_controller:main
+person_follower = final_project.person_follower:main

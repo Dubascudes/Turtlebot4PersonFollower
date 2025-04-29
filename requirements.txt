@@ -1,0 +1,5 @@
+opencv-python>=4.8.0
+ultralytics>=8.0.0
+filterpy>=1.4.5
+numpy>=1.24.0
+cv_bridge>=1.13.0
