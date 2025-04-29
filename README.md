@@ -27,9 +27,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Install ROS 2 dependencies:
+4. Install ROS 2 dependencies and source ROS:
 ```bash
 sudo apt-get install ros-jazzy-cv-bridge ros-jazzy-image-transport ros-jazzy-sensor-msgs ros-jazzy-std-msgs
+source /opt/ros/jazzy/install/setup.bash
 ```
 
 5. Build the ROS 2 workspace:
