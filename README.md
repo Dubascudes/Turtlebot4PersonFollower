@@ -13,7 +13,7 @@ This project implements a person-following robot using ROS 2. We us YOLOv8n for 
 1. Clone this repository:
 ```bash
 git clone <repository-url>
-cd robotics_project
+cd ~/path/to/repo
 ```
 
 2. Create and activate a virtual environment:
