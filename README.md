@@ -18,7 +18,7 @@ The robot tries to center its camera on the bounding box center. We also use an 
 SORT to keep track of all the different objects that have been detected and only follow the object
 that was initially detected.
 
-P-Control: We directly control the linear and angular velocity through the Twist node. We get the
+P-Control: We directly control the linear and angular velocity and publish them to /cmd_vel in a TwistStamped message. We get the
 heading from the robot to the person by comparing the camera center to the bounding box center and adjust accordingly. 
 We get the distance from the robot to the person using lidar information. When the robot reaches the minimum following
 distance, it stops and waits for the person to move farther away. When the person moves out of camera view, the robot
